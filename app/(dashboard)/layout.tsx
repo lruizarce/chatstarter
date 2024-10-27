@@ -9,12 +9,15 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarProvider,
+  Sidebar,
 } from "@/components/ui/sidebar";
 import { RedirectToSignIn, SignOutButton } from "@clerk/nextjs";
 import { Authenticated, Unauthenticated, useQuery } from "convex/react";
-import { Link, PlusIcon, Sidebar, User2Icon } from "lucide-react";
 import { api } from "../../convex/_generated/api";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { PlusIcon, User2Icon } from "lucide-react";
+import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,7 +32,12 @@ export default function DashboardLayout({
 }) {
   return (
     <>
-      <Authenticated>{children}</Authenticated>
+      <Authenticated>
+        <SidebarProvider>
+          <DashboardSidebar />
+          {children}
+        </SidebarProvider>
+      </Authenticated>
       <Unauthenticated>
         <RedirectToSignIn />
       </Unauthenticated>
@@ -59,7 +67,7 @@ function DashboardSidebar() {
             <SidebarGroupLabel>Direct Messages</SidebarGroupLabel>
             <SidebarGroupAction>
               <PlusIcon />
-              <span className="st-only"> New Direct Message </span>
+              <span className="sr-only"> New Direct Message </span>
             </SidebarGroupAction>
           </SidebarGroup>
           <SidebarFooter>
