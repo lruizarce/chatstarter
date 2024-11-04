@@ -27,7 +27,7 @@ import { NewDirectMessage } from "./new-direct-message";
 import { usePathname } from "next/navigation";
 
 const useTestDirectMessage = () => {
-  const user = useQuery(api.functions.user.get);
+  const user = useQuery(api.functions.dm.list);
   if (!user) {
     return [];
   }
@@ -36,7 +36,7 @@ const useTestDirectMessage = () => {
 
 export function DashboardSidebar() {
   const user = useQuery(api.functions.user.get);
-  const directMessage = useTestDirectMessage();
+  const directMessage = useQuery(api.functions.dm.)
   const pathname = usePathname();
   if (!user) {
     return null;
@@ -61,7 +61,7 @@ export function DashboardSidebar() {
             <NewDirectMessage />
             <SidebarGroupContent>
               <SidebarMenu>
-                {directMessage.map((directMessage) => (
+                {directMessage?.map((directMessage) => (
                   <SidebarMenuItem key={directMessage._id}>
                     <SidebarMenuButton
                       asChild
@@ -69,12 +69,12 @@ export function DashboardSidebar() {
                     >
                       <Link href={`/dms/${directMessage._id}`}>
                         <Avatar className="size-6">
-                          <AvatarImage src={directMessage.image} />
+                          <AvatarImage src={directMessage.user.image} />
                           <AvatarFallback>
                             {directMessage.username[0]}
                           </AvatarFallback>
                         </Avatar>
-                        <p className="'font-medium">{directMessage.username}</p>
+                        <p className="'font-medium">{directMessage.user.username}</p>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

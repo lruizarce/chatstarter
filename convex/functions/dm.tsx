@@ -63,6 +63,14 @@ export const create = authenticatedMutation({
     if (directMessage) {
       return directMessage.directMessage;
     }
+    const NewDirectMessage = await ctx.db.insert("directMessages", {});
+    await Promise.all([
+      ctx.db.insert("directMessageMembers", {
+        user: ctx.user._id,
+        directMessage: NewDirectMessage,
+      }),
+    ]);
+    return NewDirectMessage;
   },
 });
 

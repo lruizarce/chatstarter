@@ -19,7 +19,7 @@ export const list = authenticatedQuery({
     }
     const messages = await ctx.db
       .query("messages")
-      .withIndex("by_direct_message", (q) =>
+      .withIndex("by_direct_messages", (q) =>
         q.eq("directMessage", directMessage)
       )
       .collect();
