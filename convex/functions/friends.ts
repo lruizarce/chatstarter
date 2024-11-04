@@ -1,5 +1,5 @@
 import { authenticatedMutation, authenticatedQuery } from "./helpers";
-import { QueryCtx} from "../_generated/server";
+import { QueryCtx } from "../_generated/server";
 import { v } from "convex/values";
 import { Id } from "../_generated/dataModel";
 
@@ -36,32 +36,29 @@ export const listAccepted = authenticatedQuery({
 });
 
 export const createFriendRequest = authenticatedMutation({
-  args: {username: v.string()},
-  handler async (ctx, {username}) => {
+  args: { username: v.string() },
+  handler: async (ctx, { username }) => {
     const user = await ctx.db
-    .query("users")
-    .withIndex("by_username", (q) => q.eq("username", username))
-    .unique();
-    if (!user){
-      throw new Error("Username not found.")
-    } else if (user._id === ctx.user._id){
-      throw new Error("Connot add yourself")
+      .query("users")
+      .withIndex("by_username", (q) => q.eq("username", username))
+      .unique();
+    if (!user) {
+      throw new Error("Username not found.");
+    } else if (user._id === ctx.user._id) {
+      throw new Error("Connot add yourself");
     }
     await ctx.db.insert("friends", {
       user1: ctx.user._id,
       user2: ctx.user._id,
-      status: "pending"
-    })
-  }
-
+      status: "pending",
+    });
+  },
 });
 
 export const updateStatus = authenticatedMutation({
   args: {
     id: v.id("friends"),
-    status: v.union(
-      v.literal("accepted"),
-       v.literal("rejected")),
+    status: v.union(v.literal("accepted"), v.literal("rejected")),
   },
   handler: async (ctx, { id, status }) => {
     const friend = await ctx.db.get(id);
@@ -85,10 +82,15 @@ const mapWithUsers = async <
 ) => {
   const result = await Promise.allSettled(
     items.map(async (item) => {
-      const user = await ctx.db.get(items[key]);
+      const user = await ctx.db.get(item[key]);
       if (!user) {
         throw new Error("User not found");
       }
+      return {
+        ...item,
+        user,
+      };
     })
   );
+  return result.filter((r) => r.status === "fulfilled").map((r) => r.value);
 };

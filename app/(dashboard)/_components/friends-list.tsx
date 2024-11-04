@@ -1,4 +1,4 @@
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { api } from "@/convex/_generated/api";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,8 @@ import React from "react";
 import { cn } from "@/lib/utils";
 
 export function PendingFriendsList() {
-  const friends = useQuery(api.functions.friends.ListPending);
+  const friends = useQuery(api.functions.friends.listAccepted);
+  const updateStatus = useMutation(api.functions.friends.updateStatus);
 
   return (
     <div className="flex flex-col divide-y">
@@ -29,11 +30,13 @@ export function PendingFriendsList() {
             title="Accept friend request"
             icon={<CheckIcon />}
             className="bg-green-100"
+            onClick={() => updateStatus({ id: friend._id, status: "accepted" })}
           />
           <IconButton
             title="Decline friend request"
             icon={<XIcon />}
             className="bg-red-100"
+            onClick={() => updateStatus({ id: friend._id, status: "rejected" })}
           />
         </FriendItem>
       ))}
@@ -43,6 +46,7 @@ export function PendingFriendsList() {
 
 export function AcceptedFriendsList() {
   const friends = useQuery(api.functions.friends.listAccepted);
+  const updateStatus = useMutation(api.functions.friends.updateStatus);
 
   return (
     <div className="flex flex-col divide-y">
@@ -58,11 +62,17 @@ export function AcceptedFriendsList() {
           username={friend.user.username}
           image={friend.user.image}
         >
-          <IconButton title="Start DM" icon={<MessageCircleIcon />} />
+          <IconButton
+            title="Start DM"
+            icon={<MessageCircleIcon />}
+            onClick={() => {}}
+          />
+
           <IconButton
             title="Remove Friend"
             icon={<XIcon />}
             className="bg-red-100"
+            onClick={() => updateStatus({ id: friend._id, status: "rejected" })}
           />
         </FriendItem>
       ))}
@@ -96,6 +106,7 @@ function IconButton({
           className={cn("rounded-full", className)}
           variant="outline"
           size="icon"
+          onClick={() => {}}
         >
           {icon}
           <span className="sr-only">{title}</span>
