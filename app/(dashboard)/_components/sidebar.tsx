@@ -63,7 +63,7 @@ export function DashboardSidebar() {
                         <Avatar className="size-6">
                           <AvatarImage src={directMessage.user.image} />
                           <AvatarFallback>
-                            {directMessage.username[0]}
+                            {directMessage.user.username[0]}
                           </AvatarFallback>
                         </Avatar>
                         <p className="'font-medium">
