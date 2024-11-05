@@ -21,6 +21,7 @@ import { useRouter } from "next/navigation";
 export function NewDirectMessage() {
   const [open, setOpen] = useState(false);
   const createDirectMessage = useMutation(api.functions.dm.create);
+  const [username, setUsername] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -57,7 +58,12 @@ export function NewDirectMessage() {
           <form className="content" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-1">
               <Label htmlFor="username">Username</Label>
-              <Input id="username" type="text" />
+              <Input
+                id="username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
             </div>
             <DialogFooter>
               <Button>Start Direct Message.</Button>
