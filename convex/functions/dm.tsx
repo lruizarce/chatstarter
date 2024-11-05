@@ -69,6 +69,10 @@ export const create = authenticatedMutation({
         user: ctx.user._id,
         directMessage: NewDirectMessage,
       }),
+      ctx.db.insert("directMessageMembers", {
+        user: user._id,
+        directMessage: NewDirectMessage,
+      }),
     ]);
     return NewDirectMessage;
   },
