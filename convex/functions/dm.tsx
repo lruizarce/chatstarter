@@ -90,7 +90,7 @@ const getDirectMessage = async (
   if (!otherMember) {
     throw new Error("Direct message has no other member.");
   }
-  const user = await ctx.db.get(otherMember.user);
+  const user = await ctx.db.get(otherMember[0].user);
   if (!user) {
     throw new Error("Other member does not exsist.");
   }

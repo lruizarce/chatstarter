@@ -26,17 +26,9 @@ import { api } from "../../../convex/_generated/api";
 import { NewDirectMessage } from "./new-direct-message";
 import { usePathname } from "next/navigation";
 
-const useTestDirectMessage = () => {
-  const user = useQuery(api.functions.dm.list);
-  if (!user) {
-    return [];
-  }
-  return [user, user, user];
-};
-
 export function DashboardSidebar() {
   const user = useQuery(api.functions.user.get);
-  const directMessage = useQuery(api.functions.dm.)
+  const directMessage = useQuery(api.functions.dm.list);
   const pathname = usePathname();
   if (!user) {
     return null;
@@ -74,7 +66,9 @@ export function DashboardSidebar() {
                             {directMessage.username[0]}
                           </AvatarFallback>
                         </Avatar>
-                        <p className="'font-medium">{directMessage.user.username}</p>
+                        <p className="'font-medium">
+                          {directMessage.user.username}
+                        </p>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

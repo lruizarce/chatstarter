@@ -32,10 +32,12 @@ export default defineSchema({
   messages: defineTable({
     sender: v.id("users"),
     content: v.string(),
-    directMessage: v.id("directMessages"),
+    directMessage: v.optional(v.id("directMessages")),
+    attachment: v.optional(v.id("_storage")),
   }).index("by_direct_messages", ["directMessage"]),
+
   typingIndicators: defineTable({
-    user: v.id("user"),
+    user: v.id("users"),
     directMessage: v.id("directMessages"),
     expiresAt: v.number(),
   })
