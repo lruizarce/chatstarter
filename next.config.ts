@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-("hello");
+
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
